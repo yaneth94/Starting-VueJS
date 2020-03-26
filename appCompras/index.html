@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
+    <title>App de Compras</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div id="lista-compras">
+                <!--<h1>{{ header ? header : ' Bienvenido' }}</h1>-->
+                <div class="header">
+                    <h1>{{ header.toLocaleUpperCase() }}</h1>
+                    <button v-if="estado === 'default'" class="btn btn-primary" @click="cambiarEstado('edit')">Agregar</button>
+                    <button v-else class="btn btn-secondary" @click="cambiarEstado('default')">Cancelar</button>
+                </div>
+                <div v-if="estado === 'edit'">
+                    <!--<input type="text" placeholder="Agregar nuevo" v-model="newUtil" @keyup.enter="guardarUtil">-->
+                    <input type="text" placeholder="Agregar nombre" v-model="newUtil">
+                    <input type="text" placeholder="Agregar cantidad" v-model="newCantidad">
+                    <!---->
+                    <p>{{cantidadCaracteres}} /200</p>
+                    <button class="btn btn-primary" v-bind:disabled='(newUtil.length === 0 || newUtil.trim() == "") && (newCantidad.length === 0 || newCantidad.trim() == "")' @click="guardarUtil">Guardar</button>
+                </div>
+                <ul>
+                    <li v-for="util in listarReversa" :class="{tachado : util.comprado}" @click="cambiarEstadoCompra(util)">{{ util.nombre }} - {{ util.cantidad }}</li>
+                </ul>
+                <p v-if=" utiles.length===0 ">No existen elementos en la lista</p>
+            </div>
+        </div>
+    </div>
+
+    <!--<script src="https://cdn.jsdelivr.net/npm/vue "></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js "></script>
+    <script>
+        var app = new Vue({
+            el: '#lista-compras',
+            data: {
+                header: 'Listado de Utiles',
+                newUtil: '',
+                newCantidad: '',
+                estado: 'default',
+                utiles: [{
+                        nombre: 'Cuaderno',
+                        cantidad: '10',
+                        comprado: false
+                    }, {
+                        nombre: 'Borrador',
+                        cantidad: '5',
+                        comprado: false
+                    }, {
+                        nombre: 'Lapiz',
+                        cantidad: '15',
+                        comprado: true
+                    }, {
+                        nombre: 'Caja de Color',
+                        cantidad: '5',
+                        comprado: false
+                    },
+
+                    /* '10 cuadernos',
+                     '15 lapices',
+                     '5 cajas de colores'*/
+                ]
+            },
+            computed: {
+                cantidadCaracteres: function() {
+                    return this.newUtil.length;
+                },
+                listarReversa: function() {
+                    return this.utiles.slice(0).reverse();
+                }
+            },
+            methods: {
+                guardarUtil: function() {
+                    let nuevoElemento = {
+                        nombre: this.newUtil,
+                        cantidad: this.newCantidad,
+                        comprado: false
+                    }
+                    this.utiles.push(nuevoElemento);
+                    this.newUtil = '';
+                    this.newCantidad = '';
+                },
+                cambiarEstado: function(newEstado) {
+                    this.estado = newEstado;
+                    this.newUtil = '';
+                    this.newCantidad = '';
+                },
+                cambiarEstadoCompra: function(util) {
+                    util.comprado = !util.comprado;
+                }
+            },
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js " integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n " crossorigin="anonymous "></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js " integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo " crossorigin="anonymous "></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js " integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6 " crossorigin="anonymous "></script>
+</body>
+
+</html>
