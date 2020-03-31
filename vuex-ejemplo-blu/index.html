@@ -40,16 +40,29 @@
             mutations: {
                 increment(state) {
                     state.numero++
+                },
+                decrement(state, n) {
+                    state.numero -= n
                 }
             }
         })
 
         Vue.component('hijo', {
+            //paso de parametro en decrement
             template: `
             <div>
-                <button @click="$store.commit('increment')">+</button>
+                <button @click="increment">+</button>
+                <button @click="decrement(2)">-</button>
+                <h1>numero desde hijo: {{ numero }}</h1>
             </div>
-            `
+            `,
+            //mapState se ocupara
+            computed: {
+                ...Vuex.mapState(['numero'])
+            },
+            methods: {
+                ...Vuex.mapMutations(['increment', 'decrement'])
+            }
         })
         new Vue({
             el: '#app',
