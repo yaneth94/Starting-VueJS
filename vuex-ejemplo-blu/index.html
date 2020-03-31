@@ -18,10 +18,20 @@
         Vue.component('titulo', {
             template: `
             <div>
-                <h1>numero: {{ this.$store.state.numero  }}</h1>
+                <h1>numero: {{ numero  }}</h1>
                 <hijo></hijo>
             </div>
             `,
+            //retornando en una propiedad computada
+            /*computed: {
+                numero() {
+                    return store.state.numero
+                }
+            }*/
+            //mapState se ocupara
+            computed: {
+                ...Vuex.mapState(['numero'])
+            }
         });
         const store = new Vuex.Store({
             state: {
